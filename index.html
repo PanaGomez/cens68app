@@ -1,0 +1,2358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Hilos Invisibles | CENS Módulo 3 Nivel II</title>
+  <meta name="theme-color" content="#065f46">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #ecfdf5;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --purple: #8b5cf6;
+      --purple-light: #f5f3ff;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 90px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Top Sticky Header */
+    header {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #059669 100%);
+      color: white;
+      padding: 14px 16px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .badge-cens {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 3px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .btn-qr-top {
+      background: #ffffff;
+      color: #064e3b;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: transform 0.15s;
+    }
+
+    .btn-qr-top:active {
+      transform: scale(0.96);
+    }
+
+    header h1 {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      margin-bottom: 2px;
+    }
+
+    header p {
+      font-size: 12px;
+      color: #a7f3d0;
+      font-weight: 500;
+    }
+
+    /* Container for content */
+    .app-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    /* Tabs transitions */
+    .tab-pane {
+      display: none;
+      animation: slideUp 0.22s ease-out;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Common Card Styling */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+    }
+
+    .card-title .icon-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    /* Stat Grids */
+    .stats-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .stat-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.3;
+    }
+
+    /* Pedagogy Callout */
+    .pedagogy-callout {
+      background: #f0fdf4;
+      border-left: 4px solid var(--primary);
+      padding: 12px 14px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 13px;
+      margin-bottom: 14px;
+      color: #166534;
+    }
+
+    .pedagogy-callout h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #064e3b;
+      margin-bottom: 4px;
+    }
+
+    /* Interactive Pill Switcher */
+    .pill-switcher {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: 999px;
+      padding: 4px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .pill-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border: none;
+      background: transparent;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.18s;
+    }
+
+    .pill-btn.active {
+      background: white;
+      color: var(--text-main);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    /* Canvas styling */
+    .canvas-container {
+      width: 100%;
+      position: relative;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+    }
+
+    /* Survey Bars without truncation */
+    .survey-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 14px 0 6px;
+    }
+
+    .survey-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .survey-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .survey-item-label {
+      font-weight: 700;
+      color: #334155;
+      flex: 1;
+    }
+
+    .survey-item-pct {
+      font-weight: 800;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .survey-track {
+      width: 100%;
+      height: 16px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .survey-fill {
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Sliders and Math controls */
+    .slider-group {
+      margin-bottom: 12px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .slider-label strong {
+      color: var(--text-main);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .linear-results {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    .info-callout {
+      background: #eff6ff;
+      border-left: 3px solid #3b82f6;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #1e40af;
+      margin-top: 10px;
+      line-height: 1.45;
+    }
+
+    /* Flowchart Inspector Card */
+    .node-inspector {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .node-inspector .badge {
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    /* Physics Sim Controls */
+    .sim-playback-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 8px 12px;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+
+    .btn-sim-action {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-sim-reset {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Eco Calculator Buttons */
+    .garment-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .garment-btn {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .garment-btn.selected {
+      border-color: var(--primary);
+      background: #ecfdf5;
+    }
+
+    .garment-btn .emoji {
+      font-size: 22px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .garment-btn .txt {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .garment-btn .count {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* Catalog Filters */
+    .chip-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      scrollbar-width: none;
+    }
+
+    .chip-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      white-space: nowrap;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: white;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Catalog Items */
+    .catalog-item {
+      display: flex;
+      gap: 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .catalog-thumb {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .catalog-details {
+      flex: 1;
+    }
+
+    .catalog-details h5 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .catalog-details p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .catalog-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #ecfdf5;
+      color: #047857;
+      margin-top: 3px;
+    }
+
+    .btn-claim {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-claim:active {
+      background: var(--primary-dark);
+    }
+
+    /* Bottom Nav Bar */
+    nav.bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 60;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .nav-item {
+      flex: 1;
+      background: transparent;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 0;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 700;
+      transition: color 0.15s;
+    }
+
+    .nav-item .icon {
+      font-size: 19px;
+      margin-bottom: 2px;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    /* Modal Overlay */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      animation: popModal 0.2s ease-out;
+    }
+
+    @keyframes popModal {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .qr-container {
+      background: white;
+      padding: 12px;
+      display: inline-block;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin: 14px 0 10px;
+    }
+
+    .btn-close-modal {
+      width: 100%;
+      padding: 10px;
+      background: #f1f5f9;
+      color: var(--text-main);
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="top-bar">
+      <span class="badge-cens">CENS · MÓDULO 3 · NIVEL II</span>
+      <button class="btn-qr-top" onclick="showQrModal()">
+        <span>📲</span> Stand QR
+      </button>
+    </div>
+    <h1>Hilos Invisibles</h1>
+    <p>Desnaturalizar el Fast Fashion desde la Ciencia y la Comunidad</p>
+  </header>
+
+  <div class="app-container">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: INICIO                              -->
+    <!-- ========================================== -->
+    <div id="pane-inicio" class="tab-pane active">
+      
+      <!-- Contexto Pedagógico -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">🎯</span>
+            <span>Marco del Proyecto de Acción</span>
+          </div>
+        </div>
+        <div class="pedagogy-callout">
+          <h4>Contexto Problematizador:</h4>
+          «Desnaturalizar lo tecnológico: visibilizar la producción científica en lo cotidiano.»
+          <p style="margin-top: 6px; font-size: 12px; color: #14532d;">
+            <strong>Situación Problemática:</strong> El crecimiento vertiginoso de las plataformas de fast fashion (Shein, Temu) y su impacto en el comercio de barrio, el trabajo digno, la energía y el ambiente.
+          </p>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">
+          Esta aplicación condensa la investigación y acción interdisciplinaria realizada por estudiantes y docentes de <strong>Matemática, Física, Economía y Tecnologías de la Información</strong> para construir un modelo de <strong>Economía Circular</strong> en la institución.
+        </p>
+      </div>
+
+      <!-- Métricas Relevantes -->
+      <div class="stats-2col">
+        <div class="stat-box">
+          <div class="stat-val">2.700 L</div>
+          <div class="stat-desc">Agua dulce requerida para 1 sola remera nueva de algodón.</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">19.200 km</div>
+          <div class="stat-desc">Distancia logística promedio de una prenda desde Asia.</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">85%</div>
+          <div class="stat-desc">De la ropa descartable termina en basurales o incinerada.</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">55% a 65%</div>
+          <div class="stat-desc">Ahorro económico real considerando insumos y mano de obra digna.</div>
+        </div>
+      </div>
+
+      <!-- Cuatro Áreas Curriculares -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">🧩</span>
+            <span>Integración Interdisciplinaria</span>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="padding: 10px; background: #eff6ff; border-radius: 10px; border-left: 3px solid #3b82f6; font-size: 12px;">
+            <strong style="color: #1e40af;">Tecnologías de la Información:</strong> Diagrama de flujo en Canvas, algoritmos de recomendación, Big Data y dark patterns.
+          </div>
+          <div style="padding: 10px; background: #f5f3ff; border-radius: 10px; border-left: 3px solid #8b5cf6; font-size: 12px;">
+            <strong style="color: #6d28d9;">Matemática:</strong> Encuesta escolar (n=120) sin recortes de texto, porcentajes y función lineal con desglose de mano de obra.
+          </div>
+          <div style="padding: 10px; background: #ecfdf5; border-radius: 10px; border-left: 3px solid #10b981; font-size: 12px;">
+            <strong style="color: #065f46;">Física:</strong> Laboratorio cinemático interactivo con animación de vehículos y gráficos de posición y velocidad (MRU y MRUV).
+          </div>
+          <div style="padding: 10px; background: #fefce8; border-radius: 10px; border-left: 3px solid #eab308; font-size: 12px;">
+            <strong style="color: #854d0e;">Economía:</strong> Estructura real de costos, valorización del trabajo local y puesta en marcha del Ropero Comunitario.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: ALGORITMO (DIAGRAMA DE FLUJO CANVAS)-->
+    <!-- ========================================== -->
+    <div id="pane-algoritmo" class="tab-pane">
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">🤖</span>
+            <span>Diagrama de Flujo: Algoritmo vs. Circularidad</span>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+          Visualización lógica en Canvas del proceso algorítmico de consumo frente al ciclo sustentable del CENS. Tocá cualquier nodo del diagrama para ver su análisis:
+        </p>
+
+        <!-- Selector de Diagrama -->
+        <div class="pill-switcher">
+          <button id="btn-flow-ff" class="pill-btn active" onclick="setFlowchartType('ff')">
+            🔴 Algoritmo Fast Fashion
+          </button>
+          <button id="btn-flow-cc" class="pill-btn" onclick="setFlowchartType('cc')">
+            🟢 Economía Circular CENS
+          </button>
+        </div>
+
+        <!-- Canvas del Diagrama de Flujo con Bifurcación -->
+        <div class="canvas-container" style="height: 520px;">
+          <canvas id="canvas-flowchart"></canvas>
+        </div>
+
+        <!-- Inspector interactivo del nodo seleccionado -->
+        <div id="flowchart-inspector" class="node-inspector">
+          <span class="badge" style="background: #fee2e2; color: #dc2626;" id="inspector-badge">Paso 1</span>
+          <div>
+            <strong id="inspector-title" style="font-size: 13px; color: var(--text-main);">Rastreo de Datos y Scroll Infinito</strong>
+            <p id="inspector-desc" style="color: var(--text-muted); margin-top: 2px;">
+              Las plataformas analizan tus tiempos de pantalla, 'me gusta' y búsquedas para predecir tus impulsos emocionales.
+            </p>
+          </div>
+        </div>
+
+        <!-- Botones del editor de instrucciones -->
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <button class="btn-sim-action" style="flex: 1;" onclick="openStepEditor()">✏️ Editor de Instrucciones</button>
+          <button class="btn-sim-reset" onclick="resetFlowchartSteps()">↺ Restablecer</button>
+        </div>
+
+      </div>
+
+      <!-- Tarjeta Dark Patterns -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">⚠️</span>
+            <span>Patrones Oscuros (Dark Patterns)</span>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+          Las apps de fast fashion utilizan trucos de diseño psicológico: temporizadores de cuenta regresiva falsa <em>("Oferta expira en 03:42")</em>, notificaciones intrusivas de "stock limitado" y descuentos por ruletas que simulan juegos de azar para inducir la compra impulsiva.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: MATEMÁTICA Y COSTOS                 -->
+    <!-- ========================================== -->
+    <div id="pane-matematica" class="tab-pane">
+      
+      <!-- Encuesta Escolar Sin Cortes de Texto -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">📊</span>
+            <span>Encuesta de Hábitos de Consumo</span>
+          </div>
+          <span style="font-size: 11px; background: #e2e8f0; padding: 2px 8px; border-radius: 999px; font-weight: 700;">
+            n = 120
+          </span>
+        </div>
+        
+        <p style="font-size: 12px; color: var(--text-muted);">
+          Seleccioná la pregunta para ver la distribución porcentual completa de respuestas:
+        </p>
+
+        <!-- Selector de pregunta -->
+        <div style="margin: 10px 0 6px;">
+          <select id="survey-select" onchange="renderSurveyHTML()" style="width: 100%; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 13px; font-weight: 700; background: white; color: var(--text-main); cursor: pointer;">
+            <option value="lugares">1. ¿Dónde comprás ropa habitualmente?</option>
+            <option value="criterio">2. ¿Cuál es el criterio principal de elección?</option>
+            <option value="destino">3. ¿Qué hacés con la ropa que no usás?</option>
+          </select>
+        </div>
+
+        <!-- Lista de Barras completas (HTML Responsivo sin truncar texto) -->
+        <div id="survey-bars-container" class="survey-list">
+          <!-- Generado dinámicamente -->
+        </div>
+
+        <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border); padding-top: 8px;">
+          Datos recolectados por estudiantes del CENS entre turnos mañana y noche. Total de respuestas: <strong>120 casos válidos</strong>.
+        </div>
+      </div>
+
+      <!-- Modelización Función Lineal con Mano de Obra Realista -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">📐</span>
+            <span>Estructura de Costos: Función Lineal</span>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+          Modelamos el costo real del Ropero Circular: <strong>Insumos materiales + Mano de obra justa + Costo fijo de herramientas</strong> frente a la compra nueva.
+        </p>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>Prendas a recuperar:</span>
+            <strong id="disp-x">5 prendas</strong>
+          </div>
+          <input type="range" id="range-x" min="1" max="25" value="5" oninput="recalcLinear()">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>Costo de insumos por prenda (cierre, hilo, botones):</span>
+            <strong id="disp-m-ins">$1.500</strong>
+          </div>
+          <input type="range" id="range-m-ins" min="500" max="4000" step="500" value="1500" oninput="recalcLinear()">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>Valor de la mano de obra por prenda (tiempo de taller):</span>
+            <strong id="disp-m-lab">$4.500</strong>
+          </div>
+          <input type="range" id="range-m-lab" min="1500" max="8000" step="500" value="4500" oninput="recalcLinear()">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>Precio promedio de prenda nueva:</span>
+            <strong id="disp-p">$16.000</strong>
+          </div>
+          <input type="range" id="range-p" min="8000" max="40000" step="1000" value="16000" oninput="recalcLinear()">
+        </div>
+
+        <!-- Mini Gráfico de rectas -->
+        <div class="canvas-container" style="height: 190px;">
+          <canvas id="chart-linear"></canvas>
+        </div>
+
+        <div class="linear-results">
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">Costo Circular (Insumos + Trabajo):</div>
+            <strong id="out-circ" style="color: var(--primary); font-size: 16px;">$33.000</strong>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; color: var(--text-muted);">Gasto en Prendas Nuevas:</div>
+            <strong id="out-new" style="color: var(--danger); font-size: 16px;">$80.000</strong>
+          </div>
+        </div>
+
+        <div style="margin-top: 10px; padding: 10px; background: #ecfdf5; border-radius: 8px; text-align: center;">
+          <strong id="out-saving" style="font-size: 13px; color: #047857;">
+            ¡Ahorro directo de $47.000 (58.8%) respecto a comprar nuevo!
+          </strong>
+        </div>
+
+        <!-- Justificación económica -->
+        <div class="info-callout">
+          <strong>⚖️ ¿Por qué el ahorro real ronda el 50% - 60% y no el 90%?</strong><br>
+          Si solo contáramos el costo de un cierre o hilo ($1.500), parecería un ahorro ficticio del 90%, pero estaríamos <em>invisibilizando el valor del trabajo humano</em>. Al remunerar dignamente la mano de obra del taller de costura ($4.500/prenda), el ahorro real y sostenible se sitúa entre el 50% y el 65%, protegiendo la dignidad del trabajador y la economía familiar.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: FÍSICA Y CINEMÁTICA INTERACTIVA     -->
+    <!-- ========================================== -->
+    <div id="pane-fisica" class="tab-pane">
+      
+      <!-- Laboratorio Cinemático Interactivo -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">🚢</span>
+            <span>Laboratorio Cinemático Interactivo</span>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+          Simulación en tiempo real del transporte global de textiles: compará el movimiento constante del barco frente a las aceleraciones urbanas del reparto:
+        </p>
+
+        <!-- Selector de Transporte -->
+        <div class="pill-switcher">
+          <button id="btn-phys-ship" class="pill-btn active" onclick="setPhysicsMode('ship')">
+            🚢 Buque Marítimo (MRU)
+          </button>
+          <button id="btn-phys-truck" class="pill-btn" onclick="setPhysicsMode('truck')">
+            🚚 Reparto Urbano (MRUV)
+          </button>
+        </div>
+
+        <!-- Canvas de Simulación Dinámica y Gráficos -->
+        <div class="canvas-container" style="height: 240px;">
+          <canvas id="canvas-physics"></canvas>
+        </div>
+
+        <!-- Barra de reproducción -->
+        <div class="sim-playback-bar">
+          <button class="btn-sim-action" id="btn-sim-play" onclick="togglePhysicsSim()">
+            <span id="sim-play-icon">▶</span> <span id="sim-play-text">Iniciar Viaje</span>
+          </button>
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;" id="sim-live-stats">
+            Distancia: 0 km · Tiempo: 0 h
+          </div>
+          <button class="btn-sim-reset" onclick="resetPhysicsSim()">↺</button>
+        </div>
+
+        <!-- Controles dinámicos de parámetros físicos -->
+        <div id="phys-controls-ship" style="margin-top: 8px;">
+          <div class="slider-group">
+            <div class="slider-label">
+              <span>Velocidad de navegación constante (v):</span>
+              <strong id="disp-ship-v">35 km/h (19 nudos)</strong>
+            </div>
+            <input type="range" id="range-ship-v" min="20" max="50" step="5" value="35" oninput="updatePhysicsParams()">
+          </div>
+          <div style="font-size: 12px; background: #eff6ff; padding: 10px; border-radius: 8px; color: #1e40af; line-height: 1.5;">
+            <strong>Ecuación de Posición MRU:</strong> Distancia = Velocidad × Tiempo (x = v · t)<br>
+            • En altamar la velocidad es constante (aceleración = 0).<br>
+            • Para cubrir los 19.200 km desde Shanghai se requieren <strong>548 horas ininterrumpidas (22,8 días)</strong> de quema masiva de fueloil pesado.
+          </div>
+        </div>
+
+        <div id="phys-controls-truck" style="margin-top: 8px; display: none;">
+          <div class="slider-group">
+            <div class="slider-label">
+              <span>Aceleración de arranque (a):</span>
+              <strong id="disp-truck-a">Moderada (1.8 m/s²)</strong>
+            </div>
+            <input type="range" id="range-truck-a" min="1" max="3" step="1" value="2" oninput="updatePhysicsParams()">
+          </div>
+          <div style="font-size: 12px; background: #fef2f2; padding: 10px; border-radius: 8px; color: #991b1b; line-height: 1.5;">
+            <strong>Ecuación de Posición MRUV:</strong> Distancia = x₀ + v₀·t + ½·a·t²<br>
+            • Aceleración urbana estándar: <strong>a = 1,8 m/s²</strong> en cada arranque tras semáforo o entrega.<br>
+            • Las paradas generan la curva de velocidad en "dientes de sierra" (sube al acelerar, cae a cero al frenar).<br>
+            • <em>Impacto ambiental:</em> Cada ciclo de aceleración <strong>duplica el consumo de diésel por kilómetro</strong> comparado con una velocidad de crucero constante.
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculadora de Recursos Ahorrados -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">🌿</span>
+            <span>Calculadora de Huella Evitada</span>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+          Elegí qué prendas recuperamos en el CENS para ver el impacto positivo en el planeta:
+        </p>
+
+        <!-- Garment Selector -->
+        <div class="garment-selector">
+          <div class="garment-btn selected" id="btn-eco-remera" onclick="adjustEcoItem('remera')">
+            <span class="emoji">👕</span>
+            <span class="txt">Remera</span>
+            <span class="count"><span id="c-remera">3</span> uds</span>
+          </div>
+          <div class="garment-btn selected" id="btn-eco-jean" onclick="adjustEcoItem('jean')">
+            <span class="emoji">👖</span>
+            <span class="txt">Jean</span>
+            <span class="count"><span id="c-jean">2</span> uds</span>
+          </div>
+          <div class="garment-btn selected" id="btn-eco-campera" onclick="adjustEcoItem('campera')">
+            <span class="emoji">🧥</span>
+            <span class="txt">Campera</span>
+            <span class="count"><span id="c-campera">1</span> ud</span>
+          </div>
+          <div class="garment-btn selected" id="btn-eco-buzo" onclick="adjustEcoItem('buzo')">
+            <span class="emoji">🧶</span>
+            <span class="txt">Buzo</span>
+            <span class="count"><span id="c-buzo">2</span> uds</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 14px;">
+          <button style="padding: 5px 12px; font-size: 11px; font-weight: 600; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer;" onclick="bulkChangeEco(1)">+ Sumar a todas</button>
+          <button style="padding: 5px 12px; font-size: 11px; font-weight: 600; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer;" onclick="bulkChangeEco(-1)">- Restar</button>
+        </div>
+
+        <!-- Indicadores de ahorro -->
+        <div class="stats-2col" style="margin-bottom: 0;">
+          <div class="stat-box" style="background: #eff6ff; border-color: #bfdbfe;">
+            <div class="stat-val" id="metric-water" style="color: #2563eb;">43.600 L</div>
+            <div class="stat-desc">Agua dulce ahorrada (equivale a 291 duchas hogareñas)</div>
+          </div>
+          <div class="stat-box" style="background: #f0fdf4; border-color: #bbf7d0;">
+            <div class="stat-val" id="metric-co2" style="color: #16a34a;">115.5 kg</div>
+            <div class="stat-desc">CO₂ no emitido (equivale a 954 km en auto naftero)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: ROPERO COMUNITARIO (CATÁLOGO)       -->
+    <!-- ========================================== -->
+    <div id="pane-ropero" class="tab-pane">
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="icon-badge">👕</span>
+            <span>Catálogo del Ropero CENS</span>
+          </div>
+          <span style="font-size: 11px; color: var(--primary); font-weight: 700;">Intercambio Escolar</span>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+          Prendas reacondicionadas en el taller escolar listas para trueque o uso solidario:
+        </p>
+
+        <!-- Filtros por categoría -->
+        <div class="chip-scroll">
+          <button class="chip active" onclick="applyCatalogFilter('todos', this)">Todas</button>
+          <button class="chip" onclick="applyCatalogFilter('abrigo', this)">Abrigos</button>
+          <button class="chip" onclick="applyCatalogFilter('pantalones', this)">Pantalones</button>
+          <button class="chip" onclick="applyCatalogFilter('remeras', this)">Remeras</button>
+          <button class="chip" onclick="applyCatalogFilter('upcycling', this)">Upcycling</button>
+        </div>
+
+        <!-- Lista de Prendas -->
+        <div id="catalog-container">
+          <!-- Item 1 -->
+          <div class="catalog-item" data-cat="abrigo">
+            <div class="catalog-thumb">🧥</div>
+            <div class="catalog-details">
+              <h5>Campera Deportiva con Capucha</h5>
+              <p>Talle M · Cierre frontal nuevo y costuras reforzadas</p>
+              <span class="catalog-badge">Ahorro: 8.500 L de agua · 19 kg CO₂</span>
+            </div>
+            <button class="btn-claim" onclick="reserveItem('Campera Deportiva con Capucha')">Pedir</button>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="catalog-item" data-cat="pantalones">
+            <div class="catalog-thumb">👖</div>
+            <div class="catalog-details">
+              <h5>Pantalón Jean Recto</h5>
+              <p>Talle 42 · Ruedo tomado y parche de diseño interior</p>
+              <span class="catalog-badge">Ahorro: 7.500 L de agua · 25 kg CO₂</span>
+            </div>
+            <button class="btn-claim" onclick="reserveItem('Pantalón Jean Recto')">Pedir</button>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="catalog-item" data-cat="remeras">
+            <div class="catalog-thumb">👕</div>
+            <div class="catalog-details">
+              <h5>Remera Lisa de Algodón</h5>
+              <p>Talle L · Lavada, desmanchada y lista para vestir</p>
+              <span class="catalog-badge">Ahorro: 2.700 L de agua · 5.5 kg CO₂</span>
+            </div>
+            <button class="btn-claim" onclick="reserveItem('Remera Lisa de Algodón')">Pedir</button>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="catalog-item" data-cat="abrigo">
+            <div class="catalog-thumb">🧶</div>
+            <div class="catalog-details">
+              <h5>Buzo Cuello Redondo de Frisa</h5>
+              <p>Talle XL · Puños cambiados con tela elástica</p>
+              <span class="catalog-badge">Ahorro: 6.000 L de agua · 15 kg CO₂</span>
+            </div>
+            <button class="btn-claim" onclick="reserveItem('Buzo Cuello Redondo de Frisa')">Pedir</button>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="catalog-item" data-cat="upcycling">
+            <div class="catalog-thumb">🎒</div>
+            <div class="catalog-details">
+              <h5>Bolso Tote Bag de Retazos</h5>
+              <p>Confección 100% escolar a partir de descartes textiles</p>
+              <span class="catalog-badge">Residuo Cero: 4 retazos salvados</span>
+            </div>
+            <button class="btn-claim" onclick="reserveItem('Bolso Tote Bag de Retazos')">Pedir</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tarjeta Afiche del Stand -->
+      <div class="card" style="background: #f0fdf4; border: 1.5px dashed #10b981; text-align: center;">
+        <h4 style="font-size: 14px; font-weight: 700; color: #064e3b; margin-bottom: 4px;">
+          ¿Querés difundir el proyecto en la escuela?
+        </h4>
+        <p style="font-size: 12px; color: #14532d; margin-bottom: 12px;">
+          Podés generar e imprimir el Código QR para pegar en los stands, pasillos y afiches del CENS.
+        </p>
+        <button class="btn-claim" style="padding: 9px 18px; font-size: 12px; background: #065f46;" onclick="showQrModal()">
+          Ver y Compartir Código QR
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-bar">
+    <button class="nav-item active" onclick="switchTab('inicio', this)">
+      <span class="icon">🏠</span>
+      <span>Inicio</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('algoritmo', this)">
+      <span class="icon">🤖</span>
+      <span>Algoritmo</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('matematica', this)">
+      <span class="icon">📊</span>
+      <span>Números</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('fisica', this)">
+      <span class="icon">⚡</span>
+      <span>Física</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('ropero', this)">
+      <span class="icon">👕</span>
+      <span>Ropero</span>
+    </button>
+  </nav>
+
+  <!-- Modal QR del Stand -->
+  <div id="modal-qr" class="modal-backdrop" onclick="hideQrModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3 style="font-size: 17px; font-weight: 800; color: var(--text-main);">Código QR del Proyecto</h3>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+        Código de identificación visual del proyecto CENS.
+      </p>
+
+      <div class="qr-container">
+        <canvas id="qr-output" width="210" height="210"></canvas>
+      </div>
+
+      <div style="font-size: 11px; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: left; color: var(--text-muted); margin-bottom: 8px;">
+        <strong>CENS Nivel II · Módulo 3</strong><br>
+        <em>«Desnaturalizar lo tecnológico: visibilizar la producción científica en lo cotidiano»</em>
+      </div>
+
+      <button class="btn-close-modal" onclick="hideQrModal()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Modal Editor de Diagrama -->
+  <div id="modal-editor" class="modal-backdrop" onclick="closeStepEditor()">
+    <div class="modal-card" style="max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: left;" onclick="event.stopPropagation()">
+      <h3 style="font-size: 17px; font-weight: 800; color: var(--text-main); text-align: center;">Editor de Instrucciones</h3>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; text-align: center;">
+        Editá los textos y descripciones de los nodos del diagrama.
+      </p>
+      <div id="editor-steps-list" style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+        <!-- Generado dinámicamente -->
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 12px;">
+        <button class="btn-close-modal" style="flex: 1; margin-top: 0;" onclick="closeStepEditor()">Cancelar</button>
+        <button class="btn-close-modal" style="flex: 1; margin-top: 0; background: var(--primary); color: white;" onclick="saveStepEditor()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Tab navigation logic
+    function switchTab(paneId, btn) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      const target = document.getElementById('pane-' + paneId);
+      if (target) target.classList.add('active');
+      if (btn) btn.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (paneId === 'algoritmo') {
+        setTimeout(initFlowchartCanvas, 40);
+      } else if (paneId === 'matematica') {
+        renderSurveyHTML();
+        setTimeout(renderLinearChart, 40);
+      } else if (paneId === 'fisica') {
+        setTimeout(initPhysicsCanvas, 40);
+      }
+    }
+
+    // ========================================================
+    // 1. ENCUESTA SIN CORTES (HTML Responsivo sin truncar texto)
+    // ========================================================
+    const surveyDataSets = {
+      lugares: [
+        { label: 'Ferias barriales y de garage', value: 42, count: 50, color: '#ef4444' },
+        { label: 'Plataformas online (Shein, Temu, AliExpress)', value: 33, count: 40, color: '#8b5cf6' },
+        { label: 'Comercios y tiendas de barrio', value: 18, count: 22, color: '#10b981' },
+        { label: 'Shopping y tiendas de grandes marcas', value: 7, count: 8, color: '#64748b' }
+      ],
+      criterio: [
+        { label: 'Precio bajo y accesible (promociones)', value: 54, count: 65, color: '#ef4444' },
+        { label: 'Necesidad urgente (reposición por rotura o trabajo)', value: 24, count: 29, color: '#3b82f6' },
+        { label: 'Calidad de tela y durabilidad garantizada', value: 14, count: 17, color: '#10b981' },
+        { label: 'Moda y tendencias virales en redes sociales', value: 8, count: 9, color: '#8b5cf6' }
+      ],
+      destino: [
+        { label: 'Queda guardada en placard o bolsas sin uso', value: 48, count: 58, color: '#f59e0b' },
+        { label: 'Se regala o dona a familiares, vecinos y amigos', value: 36, count: 43, color: '#10b981' },
+        { label: 'Se tira directamente a la basura domiciliaria', value: 11, count: 13, color: '#ef4444' },
+        { label: 'Se vende en ferias americanas del barrio', value: 5, count: 6, color: '#8b5cf6' }
+      ]
+    };
+
+    function renderSurveyHTML() {
+      const select = document.getElementById('survey-select');
+      const key = select.value;
+      const data = surveyDataSets[key];
+      const container = document.getElementById('survey-bars-container');
+      if (!container) return;
+
+      container.innerHTML = data.map(item => `
+        <div class="survey-item">
+          <div class="survey-item-header">
+            <span class="survey-item-label">${item.label}</span>
+            <span class="survey-item-pct" style="color: ${item.color};">
+              ${item.value}% <span style="font-size: 11px; color: #64748b; font-weight: normal;">(${item.count} est.)</span>
+            </span>
+          </div>
+          <div class="survey-track">
+            <div class="survey-fill" style="width: ${item.value}%; background: ${item.color};"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ========================================================
+    // 2. FUNCIÓN LINEAL: COSTOS REALISTAS CON MANO DE OBRA
+    // ========================================================
+    function recalcLinear() {
+      const x = parseInt(document.getElementById('range-x').value);
+      const mIns = parseInt(document.getElementById('range-m-ins').value);
+      const mLab = parseInt(document.getElementById('range-m-lab').value);
+      const p = parseInt(document.getElementById('range-p').value);
+      const b = 3000; // Costo fijo amortizado de tijeras, agujas, hilos
+
+      document.getElementById('disp-x').innerText = x + (x === 1 ? ' prenda' : ' prendas');
+      document.getElementById('disp-m-ins').innerText = '$' + mIns.toLocaleString('es-AR');
+      document.getElementById('disp-m-lab').innerText = '$' + mLab.toLocaleString('es-AR');
+      document.getElementById('disp-p').innerText = '$' + p.toLocaleString('es-AR');
+
+      const totalUnitarioCircular = mIns + mLab; // Insumos + Mano de obra
+      const costCirc = (totalUnitarioCircular * x) + b;
+      const costNew = p * x;
+
+      document.getElementById('out-circ').innerText = '$' + costCirc.toLocaleString('es-AR');
+      document.getElementById('out-new').innerText = '$' + costNew.toLocaleString('es-AR');
+
+      const diff = Math.max(0, costNew - costCirc);
+      const pct = ((diff / costNew) * 100).toFixed(1);
+
+      document.getElementById('out-saving').innerText = 
+        `¡Ahorro directo de $${diff.toLocaleString('es-AR')} (${pct}%) respecto a comprar nuevo!`;
+
+      renderLinearChart();
+    }
+
+    function renderLinearChart() {
+      const canvas = document.getElementById('chart-linear');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+
+      const width = canvas.parentElement.clientWidth;
+      const height = 190;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, width, height);
+
+      const padX = 42;
+      const padY = 24;
+      const chartW = width - padX - 16;
+      const chartH = height - padY - 26;
+
+      const mIns = parseInt(document.getElementById('range-m-ins').value);
+      const mLab = parseInt(document.getElementById('range-m-lab').value);
+      const mTotal = mIns + mLab;
+      const p = parseInt(document.getElementById('range-p').value);
+      const b = 3000;
+      const maxX = 25;
+      const maxY = p * maxX;
+
+      // Ejes coordenados
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padX, padY);
+      ctx.lineTo(padX, padY + chartH);
+      ctx.lineTo(padX + chartW, padY + chartH);
+      ctx.stroke();
+
+      // Recta Ropero Circular (Verde)
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i <= maxX; i++) {
+        const px = padX + (i / maxX) * chartW;
+        const val = (mTotal * i) + b;
+        const py = padY + chartH - (val / maxY) * chartH;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // Recta Prendas Nuevas (Rojo)
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i <= maxX; i++) {
+        const px = padX + (i / maxX) * chartW;
+        const val = p * i;
+        const py = padY + chartH - (val / maxY) * chartH;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // Puntos seleccionados
+      const curX = parseInt(document.getElementById('range-x').value);
+      const curPx = padX + (curX / maxX) * chartW;
+      
+      const valCirc = (mTotal * curX) + b;
+      const pyCirc = padY + chartH - (valCirc / maxY) * chartH;
+      ctx.fillStyle = '#059669';
+      ctx.beginPath();
+      ctx.arc(curPx, pyCirc, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      const valNew = p * curX;
+      const pyNew = padY + chartH - (valNew / maxY) * chartH;
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(curPx, pyNew, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Leyenda
+      ctx.font = '700 10px system-ui, sans-serif';
+      ctx.fillStyle = '#059669';
+      ctx.fillText(`● Circular: $${mTotal}/prenda + $3.000`, padX + 6, padY + 12);
+      ctx.fillStyle = '#ef4444';
+      ctx.fillText(`● Nueva: $${p}/prenda`, padX + 6, padY + 26);
+    }
+
+    // ========================================================
+    // 3. DIAGRAMA DE FLUJO EN CANVAS (CON BIFURCACIÓN REAL Y EDITOR)
+    // ========================================================
+    let currentFlowType = 'ff';
+    let flowAnimFrame = null;
+    let flowAnimTime = 0;
+    let flowNodes = [];
+    let activeInspectedNode = null;
+
+    const defaultFlowchartData = {
+      ff: {
+        title: "Algoritmo Fast Fashion",
+        nodes: [
+          { id: "start", type: "oval", role: "start", text: "Inicio: Navega en redes", color: "#64748b", bg: "#f1f5f9", desc: "El usuario abre Instagram o TikTok buscando entretenimiento casual sin intención previa de compra." },
+          { id: "proc1", type: "rect", role: "proc1", text: "Rastreo de clics y atención", color: "#b91c1c", bg: "#fee2e2", desc: "Sensores registran milisegundos de detención en fotos y zooms para deducir intereses y debilidades." },
+          { id: "dec", type: "diamond", role: "dec", text: "¿Cae en la oferta con reloj falso?", color: "#b91c1c", bg: "#fee2e2", desc: "Patrón oscuro: temporizadores regresivos ficticios para bloquear la reflexión racional del comprador." },
+          { id: "b_yes", type: "rect", role: "branch_yes", text: "Compra impulsiva (Tarjeta)", color: "#b91c1c", bg: "#fecaca", branchLabel: "SÍ", desc: "El usuario cede a la presión psicológica creyendo que la oferta expira en minutos." },
+          { id: "b_no", type: "rect", role: "branch_no", text: "Duda y sale (Retargeting)", color: "#b91c1c", bg: "#fee2e2", branchLabel: "NO", desc: "El algoritmo envía notificaciones push y cupones de 'stock limitado' para forzar el reingreso." },
+          { id: "conv", type: "rect", role: "conv", text: "Logística acelerada (Barco/Avión)", color: "#b91c1c", bg: "#fee2e2", desc: "Flete aéreo y marítimo transoceánico con masiva quema de combustibles fósiles." },
+          { id: "end", type: "oval", role: "end", text: "Fin: Basural o incineración", color: "#991b1b", bg: "#fecaca", desc: "Prendas de poliéster descartables de 3 usos que liberan microplásticos en el agua y tierra." }
+        ]
+      },
+      cc: {
+        title: "Economía Circular CENS",
+        nodes: [
+          { id: "start", type: "oval", role: "start", text: "Inicio: Ropa en desuso en casa", color: "#065f46", bg: "#d1fae5", desc: "Prendas olvidadas en placares familiares cuya fibra textil aún conserva calidad y valor." },
+          { id: "proc1", type: "rect", role: "proc1", text: "Acopio y diagnóstico escolar", color: "#047857", bg: "#ecfdf5", desc: "Estudiantes del CENS clasifican telas, verifican botones, cierres, roturas y estado general." },
+          { id: "dec", type: "diamond", role: "dec", text: "¿Tiene arreglo simple o rediseño?", color: "#047857", bg: "#ecfdf5", desc: "Toma de decisión técnica: evaluar si la prenda se repara de forma directa o se transforma." },
+          { id: "b_yes", type: "rect", role: "branch_yes", text: "Taller de Costura y Reparación", color: "#047857", bg: "#d1fae5", branchLabel: "SÍ (Arreglo)", desc: "Cambio de cierres, botones, ruedos y refuerzo de costuras revalorizando el oficio." },
+          { id: "b_no", type: "rect", role: "branch_no", text: "Taller de Upcycling (Retazos)", color: "#047857", bg: "#ecfdf5", branchLabel: "NO (Rediseño)", desc: "Desarme de telas irrecuperables para confeccionar bolsos tote bags, cartucheras y parches." },
+          { id: "conv", type: "rect", role: "conv", text: "Fichaje en Catálogo Digital QR", color: "#0284c7", bg: "#e0f2fe", desc: "Publicación comunitaria con la ficha de agua potable y gases de efecto invernadero evitados." },
+          { id: "end", type: "oval", role: "end", text: "Fin: Ropero Comunitario & Trueque", color: "#065f46", bg: "#a7f3d0", desc: "Circulación solidaria y sustentable de prendas sin intermediarios corporativos (Residuo Cero)." }
+        ]
+      }
+    };
+
+    // Cargar pasos guardados en localStorage o usar defaults
+    let flowchartData = JSON.parse(JSON.stringify(defaultFlowchartData));
+    try {
+      const saved = localStorage.getItem('cens_flowchart_data');
+      if (saved) flowchartData = JSON.parse(saved);
+    } catch(e) {}
+
+    function setFlowchartType(type) {
+      currentFlowType = type;
+      document.getElementById('btn-flow-ff').classList.toggle('active', type === 'ff');
+      document.getElementById('btn-flow-cc').classList.toggle('active', type === 'cc');
+      
+      const firstNode = flowchartData[type].nodes[0];
+      updateFlowchartInspector(firstNode, "Inicio");
+      drawFlowchart();
+    }
+
+    function initFlowchartCanvas() {
+      const canvas = document.getElementById('canvas-flowchart');
+      if (!canvas) return;
+
+      canvas.removeEventListener('click', handleFlowchartClick);
+      canvas.addEventListener('click', handleFlowchartClick);
+
+      if (!flowAnimFrame) {
+        animateFlowchart();
+      }
+      drawFlowchart();
+    }
+
+    function handleFlowchartClick(e) {
+      const canvas = document.getElementById('canvas-flowchart');
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      const hit = flowNodes.find(n => 
+        clickX >= n.x && clickX <= n.x + n.w &&
+        clickY >= n.y && clickY <= n.y + n.h
+      );
+
+      if (hit) {
+        activeInspectedNode = hit.data.id;
+        updateFlowchartInspector(hit.data, hit.badgeLabel);
+      }
+    }
+
+    function updateFlowchartInspector(nodeData, badgeText) {
+      const badge = document.getElementById('inspector-badge');
+      const title = document.getElementById('inspector-title');
+      const desc = document.getElementById('inspector-desc');
+
+      badge.innerText = badgeText || (nodeData.branchLabel ? `Rama: ${nodeData.branchLabel}` : nodeData.type.toUpperCase());
+      badge.style.background = nodeData.bg;
+      badge.style.color = nodeData.color;
+      title.innerText = nodeData.text;
+      desc.innerText = nodeData.desc;
+    }
+
+    // Dibujo del diagrama con bifurcación y partículas sobre las flechas
+    function drawFlowchart() {
+      const canvas = document.getElementById('canvas-flowchart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+
+      const width = canvas.parentElement.clientWidth;
+      const height = 520;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, width, height);
+
+      const dataset = flowchartData[currentFlowType];
+      const nodes = dataset.nodes;
+      flowNodes = [];
+
+      const cx = width / 2;
+      const wCenter = Math.min(270, width - 40);
+      const wBranch = Math.min(165, (width - 44) / 2);
+
+      // Mapear nodos por rol para posicionamiento bifurcado
+      const nodeMap = {};
+      nodes.forEach(n => { nodeMap[n.role] = n; });
+
+      // Coordenadas calculadas
+      const posMap = {
+        start: { x: cx - wCenter / 2, y: 16, w: wCenter, h: 40, data: nodeMap.start, badge: "Inicio" },
+        proc1: { x: cx - wCenter / 2, y: 88, w: wCenter, h: 44, data: nodeMap.proc1, badge: "Paso 1" },
+        dec:   { x: cx - wCenter / 2, y: 164, w: wCenter, h: 56, data: nodeMap.dec, badge: "Decisión" },
+        branch_yes: { x: cx - wBranch - 8, y: 254, w: wBranch, h: 56, data: nodeMap.branch_yes, badge: "Rama SÍ" },
+        branch_no:  { x: cx + 8, y: 254, w: wBranch, h: 56, data: nodeMap.branch_no, badge: "Rama NO" },
+        conv:  { x: cx - wCenter / 2, y: 346, w: wCenter, h: 44, data: nodeMap.conv, badge: "Paso 3" },
+        end:   { x: cx - wCenter / 2, y: 426, w: wCenter, h: 40, data: nodeMap.end, badge: "Fin" }
+      };
+
+      Object.keys(posMap).forEach(key => {
+        const item = posMap[key];
+        flowNodes.push({ x: item.x, y: item.y, w: item.w, h: item.h, data: item.data, badgeLabel: item.badge });
+      });
+
+      // 1. DIBUJAR FLECHAS DE CONEXIÓN CON BIFURCACIÓN
+      ctx.lineWidth = 2.5;
+      const arrowColor = currentFlowType === 'ff' ? '#f87171' : '#34d399';
+      const arrowHeadColor = currentFlowType === 'ff' ? '#dc2626' : '#059669';
+
+      function drawArrowLine(fromX, fromY, toX, toY) {
+        ctx.strokeStyle = arrowColor;
+        ctx.beginPath();
+        ctx.moveTo(fromX, fromY);
+        ctx.lineTo(toX, toY);
+        ctx.stroke();
+
+        // Punta de flecha
+        ctx.fillStyle = arrowHeadColor;
+        const angle = Math.atan2(toY - fromY, toX - fromX);
+        ctx.beginPath();
+        ctx.moveTo(toX, toY);
+        ctx.lineTo(toX - 7 * Math.cos(angle - Math.PI / 6), toY - 7 * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(toX - 7 * Math.cos(angle + Math.PI / 6), toY - 7 * Math.sin(angle + Math.PI / 6));
+        ctx.fill();
+      }
+
+      // Flecha 1: Start -> Proc1
+      drawArrowLine(cx, posMap.start.y + posMap.start.h, cx, posMap.proc1.y);
+
+      // Flecha 2: Proc1 -> Decisión
+      drawArrowLine(cx, posMap.proc1.y + posMap.proc1.h, cx, posMap.dec.y);
+
+      // Bifurcación Rama SÍ (Izquierda)
+      const yesMidX = posMap.branch_yes.x + posMap.branch_yes.w / 2;
+      ctx.strokeStyle = arrowColor;
+      ctx.beginPath();
+      ctx.moveTo(cx - 30, posMap.dec.y + posMap.dec.h);
+      ctx.lineTo(yesMidX, posMap.dec.y + posMap.dec.h + 14);
+      ctx.lineTo(yesMidX, posMap.branch_yes.y);
+      ctx.stroke();
+      drawArrowLine(yesMidX, posMap.branch_yes.y - 2, yesMidX, posMap.branch_yes.y);
+
+      // Badge "SÍ"
+      ctx.fillStyle = '#059669';
+      ctx.beginPath();
+      ctx.roundRect(yesMidX - 28, posMap.dec.y + posMap.dec.h + 4, 56, 16, 8);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 8px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(posMap.branch_yes.data.branchLabel || 'SÍ', yesMidX, posMap.dec.y + posMap.dec.h + 15);
+
+      // Bifurcación Rama NO (Derecha)
+      const noMidX = posMap.branch_no.x + posMap.branch_no.w / 2;
+      ctx.strokeStyle = arrowColor;
+      ctx.beginPath();
+      ctx.moveTo(cx + 30, posMap.dec.y + posMap.dec.h);
+      ctx.lineTo(noMidX, posMap.dec.y + posMap.dec.h + 14);
+      ctx.lineTo(noMidX, posMap.branch_no.y);
+      ctx.stroke();
+      drawArrowLine(noMidX, posMap.branch_no.y - 2, noMidX, posMap.branch_no.y);
+
+      // Badge "NO"
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.roundRect(noMidX - 28, posMap.dec.y + posMap.dec.h + 4, 56, 16, 8);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 8px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(posMap.branch_no.data.branchLabel || 'NO', noMidX, posMap.dec.y + posMap.dec.h + 15);
+
+      // Convergencia: Branch YES -> Conv
+      ctx.strokeStyle = arrowColor;
+      ctx.beginPath();
+      ctx.moveTo(yesMidX, posMap.branch_yes.y + posMap.branch_yes.h);
+      ctx.lineTo(yesMidX, posMap.conv.y - 12);
+      ctx.lineTo(cx - 25, posMap.conv.y);
+      ctx.stroke();
+      drawArrowLine(yesMidX, posMap.conv.y - 12, cx - 25, posMap.conv.y);
+
+      // Convergencia: Branch NO -> Conv
+      ctx.strokeStyle = arrowColor;
+      ctx.beginPath();
+      ctx.moveTo(noMidX, posMap.branch_no.y + posMap.branch_no.h);
+      ctx.lineTo(noMidX, posMap.conv.y - 12);
+      ctx.lineTo(cx + 25, posMap.conv.y);
+      ctx.stroke();
+      drawArrowLine(noMidX, posMap.conv.y - 12, cx + 25, posMap.conv.y);
+
+      // Flecha 5: Conv -> End
+      drawArrowLine(cx, posMap.conv.y + posMap.conv.h, cx, posMap.end.y);
+
+      // 2. ANIMACIÓN DE PARTÍCULAS (SOLO SOBRE LAS FLECHAS, NUNCA SOBRE EL TEXTO)
+      flowAnimTime = (flowAnimTime + 0.012) % 1.0;
+      const pColor = currentFlowType === 'ff' ? '#dc2626' : '#059669';
+
+      function drawParticle(x, y) {
+        ctx.fillStyle = pColor;
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Intervalos de viaje por cada flecha (fuera de las cajas):
+      if (flowAnimTime >= 0.02 && flowAnimTime <= 0.18) {
+        // Flecha Start -> Proc1
+        const t = (flowAnimTime - 0.02) / 0.16;
+        const py = (posMap.start.y + posMap.start.h) + t * (posMap.proc1.y - (posMap.start.y + posMap.start.h));
+        drawParticle(cx, py);
+      } else if (flowAnimTime >= 0.22 && flowAnimTime <= 0.38) {
+        // Flecha Proc1 -> Dec
+        const t = (flowAnimTime - 0.22) / 0.16;
+        const py = (posMap.proc1.y + posMap.proc1.h) + t * (posMap.dec.y - (posMap.proc1.y + posMap.proc1.h));
+        drawParticle(cx, py);
+      } else if (flowAnimTime >= 0.42 && flowAnimTime <= 0.60) {
+        // Bifurcación simultánea: viaja hacia SÍ y hacia NO a la vez
+        const t = (flowAnimTime - 0.42) / 0.18;
+        const pyL = (posMap.dec.y + posMap.dec.h) + t * (posMap.branch_yes.y - (posMap.dec.y + posMap.dec.h));
+        const pxL = (cx - 30) + t * (yesMidX - (cx - 30));
+        drawParticle(pxL, pyL);
+
+        const pyR = (posMap.dec.y + posMap.dec.h) + t * (posMap.branch_no.y - (posMap.dec.y + posMap.dec.h));
+        const pxR = (cx + 30) + t * (noMidX - (cx + 30));
+        drawParticle(pxR, pyR);
+      } else if (flowAnimTime >= 0.64 && flowAnimTime <= 0.80) {
+        // Convergencia: ambas ramas entran a Conv
+        const t = (flowAnimTime - 0.64) / 0.16;
+        const pyL = (posMap.branch_yes.y + posMap.branch_yes.h) + t * (posMap.conv.y - (posMap.branch_yes.y + posMap.branch_yes.h));
+        const pxL = yesMidX + t * ((cx - 25) - yesMidX);
+        drawParticle(pxL, pyL);
+
+        const pyR = (posMap.branch_no.y + posMap.branch_no.h) + t * (posMap.conv.y - (posMap.branch_no.y + posMap.branch_no.h));
+        const pxR = noMidX + t * ((cx + 25) - noMidX);
+        drawParticle(pxR, pyR);
+      } else if (flowAnimTime >= 0.84 && flowAnimTime <= 0.98) {
+        // Flecha Conv -> End
+        const t = (flowAnimTime - 0.84) / 0.14;
+        const py = (posMap.conv.y + posMap.conv.h) + t * (posMap.end.y - (posMap.conv.y + posMap.conv.h));
+        drawParticle(cx, py);
+      }
+
+      // 3. DIBUJAR LOS NODOS (CON RECORTE Y SIN LÍNEAS ENCIMA DEL TEXTO)
+      Object.keys(posMap).forEach(key => {
+        const item = posMap[key];
+        const n = item.data;
+        const isSelected = (activeInspectedNode === n.id);
+
+        ctx.fillStyle = n.bg;
+        ctx.strokeStyle = isSelected ? '#2563eb' : n.color;
+        ctx.lineWidth = isSelected ? 2.5 : 1.5;
+
+        if (n.type === "oval") {
+          // Óvalos Inicio y Fin
+          ctx.beginPath();
+          ctx.roundRect(item.x, item.y, item.w, item.h, 22);
+          ctx.fill();
+          ctx.stroke();
+        } else if (n.type === "diamond") {
+          // Rombo de Decisión
+          ctx.beginPath();
+          ctx.roundRect(item.x, item.y, item.w, item.h, 10);
+          ctx.fill();
+          ctx.stroke();
+
+          // Indicador de decisión
+          ctx.fillStyle = n.color;
+          ctx.font = 'bold 9px system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText("DECISIÓN", item.x + item.w / 2, item.y + 12);
+        } else {
+          // Rectángulos de proceso y ramas
+          ctx.beginPath();
+          ctx.roundRect(item.x, item.y, item.w, item.h, 8);
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        // Texto del nodo (adaptado a 1, 2 o 3 líneas para ramas)
+        ctx.fillStyle = n.color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        const words = n.text.split(' ');
+        if (item.w < 170 && words.length > 2) {
+          // Texto en dos o tres líneas para las ramas laterales
+          const lines = [];
+          if (words.length <= 4) {
+            const mid = Math.ceil(words.length / 2);
+            lines.push(words.slice(0, mid).join(' '));
+            lines.push(words.slice(mid).join(' '));
+          } else {
+            const third = Math.ceil(words.length / 3);
+            lines.push(words.slice(0, third).join(' '));
+            lines.push(words.slice(third, third * 2).join(' '));
+            lines.push(words.slice(third * 2).join(' '));
+          }
+          
+          ctx.font = '700 9px system-ui, sans-serif';
+          const lineHeight = 11;
+          const startY = item.y + item.h / 2 - (lines.length - 1) * lineHeight / 2;
+          lines.forEach((line, i) => {
+            ctx.fillText(line, item.x + item.w / 2, startY + i * lineHeight);
+          });
+        } else {
+          ctx.font = '700 10.5px system-ui, sans-serif';
+          const textY = n.type === 'diamond' ? item.y + item.h / 2 + 5 : item.y + item.h / 2;
+          ctx.fillText(n.text, item.x + item.w / 2, textY);
+        }
+      });
+    }
+
+    function animateFlowchart() {
+      const activePane = document.querySelector('.tab-pane.active');
+      if (activePane && activePane.id === 'pane-algoritmo') {
+        drawFlowchart();
+      }
+      flowAnimFrame = requestAnimationFrame(animateFlowchart);
+    }
+
+    // ========================================================
+    // EDITOR INTERACTIVO DE INSTRUCCIONES DEL ALGORITMO
+    // ========================================================
+    function openStepEditor() {
+      const modal = document.getElementById('modal-editor');
+      const listEl = document.getElementById('editor-steps-list');
+      const currentNodes = flowchartData[currentFlowType].nodes;
+
+      listEl.innerHTML = currentNodes.map((node, idx) => `
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <strong style="font-size: 12px; color: ${node.color};">
+              Paso ${idx + 1} (${node.role.toUpperCase()})
+            </strong>
+            ${node.branchLabel ? `<span style="font-size: 10px; background: #e2e8f0; padding: 1px 6px; border-radius: 4px; font-weight: bold;">Rama: ${node.branchLabel}</span>` : ''}
+          </div>
+          <div style="margin-bottom: 6px;">
+            <label style="font-size: 11px; color: #64748b; font-weight: 600;">Texto del botón/nodo:</label>
+            <input type="text" id="edit-node-text-${idx}" value="${node.text}" style="width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: bold; margin-top: 2px;">
+          </div>
+          <div>
+            <label style="font-size: 11px; color: #64748b; font-weight: 600;">Descripción pedagógica:</label>
+            <textarea id="edit-node-desc-${idx}" rows="2" style="width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; margin-top: 2px;">${node.desc}</textarea>
+          </div>
+        </div>
+      `).join('');
+
+      modal.classList.add('show');
+    }
+
+    function closeStepEditor() {
+      document.getElementById('modal-editor').classList.remove('show');
+    }
+
+    function saveStepEditor() {
+      const currentNodes = flowchartData[currentFlowType].nodes;
+      currentNodes.forEach((node, idx) => {
+        const textInput = document.getElementById(`edit-node-text-${idx}`);
+        const descInput = document.getElementById(`edit-node-desc-${idx}`);
+        if (textInput) node.text = textInput.value;
+        if (descInput) node.desc = descInput.value;
+      });
+
+      // Guardar en localStorage
+      try {
+        localStorage.setItem('cens_flowchart_data', JSON.stringify(flowchartData));
+      } catch(e) {}
+
+      closeStepEditor();
+      updateFlowchartInspector(currentNodes[0], "Inicio");
+      drawFlowchart();
+      alert("✅ ¡Instrucciones actualizadas con éxito en el diagrama!");
+    }
+
+    function resetFlowchartSteps() {
+      if (confirm("¿Deseas restablecer las instrucciones del diagrama a los valores originales del proyecto?")) {
+        flowchartData = JSON.parse(JSON.stringify(defaultFlowchartData));
+        try {
+          localStorage.removeItem('cens_flowchart_data');
+        } catch(e) {}
+        updateFlowchartInspector(flowchartData[currentFlowType].nodes[0], "Inicio");
+        drawFlowchart();
+        alert("↺ Diagrama restablecido a los valores originales.");
+      }
+    }
+
+    // ========================================================
+    // 4. FÍSICA: LABORATORIO CINEMÁTICO INTERACTIVO
+    // ========================================================
+    let physMode = 'ship'; // 'ship' o 'truck'
+    let physSimRunning = false;
+    let physAnimFrame = null;
+    let shipSpeed = 35; // km/h
+    let truckAccelMultiplier = 2; // 1: suave, 2: moderada, 3: agresiva
+
+    // Estado del Buque (MRU)
+    let shipTimeHours = 0; // 0 a 548 horas
+    let shipHistory = []; // { x, v }
+
+    // Estado del Camión (MRUV)
+    const truckStops = [
+      { pos: 0.00, label: "Depósito", icon: "🏬" },
+      { pos: 0.32, label: "Casa 1", icon: "🏡" },
+      { pos: 0.65, label: "Semáforo", icon: "🚦" },
+      { pos: 1.00, label: "CENS", icon: "🏫" }
+    ];
+    let truckLeg = 0; // 0, 1, 2
+    let truckPhase = 'accel'; // 'accel', 'cruise', 'brake', 'stopped', 'done'
+    let truckXNorm = 0; // 0 a 1 a lo largo de la calle
+    let truckVNorm = 0; // velocidad normalizada actual
+    let truckStopFrames = 0;
+    let truckHistory = []; // { x, v }
+
+    function setPhysicsMode(mode) {
+      physMode = mode;
+      document.getElementById('btn-phys-ship').classList.toggle('active', mode === 'ship');
+      document.getElementById('btn-phys-truck').classList.toggle('active', mode === 'truck');
+
+      document.getElementById('phys-controls-ship').style.display = mode === 'ship' ? 'block' : 'none';
+      document.getElementById('phys-controls-truck').style.display = mode === 'truck' ? 'block' : 'none';
+
+      resetPhysicsSim();
+    }
+
+    function togglePhysicsSim() {
+      physSimRunning = !physSimRunning;
+      document.getElementById('sim-play-icon').innerText = physSimRunning ? '⏸' : '▶';
+      document.getElementById('sim-play-text').innerText = physSimRunning ? 'Pausar' : 'Reanudar';
+    }
+
+    function resetPhysicsSim() {
+      physSimRunning = false;
+      document.getElementById('sim-play-icon').innerText = '▶';
+      document.getElementById('sim-play-text').innerText = 'Iniciar Viaje';
+
+      // Reset Barco
+      shipTimeHours = 0;
+      shipHistory = [];
+
+      // Reset Camión
+      truckLeg = 0;
+      truckPhase = 'accel';
+      truckXNorm = 0;
+      truckVNorm = 0;
+      truckStopFrames = 0;
+      truckHistory = [];
+
+      updateLiveStats(0, 0);
+      drawPhysicsCanvas();
+    }
+
+    function updatePhysicsParams() {
+      shipSpeed = parseInt(document.getElementById('range-ship-v').value);
+      document.getElementById('disp-ship-v').innerText = `${shipSpeed} km/h (${Math.round(shipSpeed * 0.54)} nudos)`;
+
+      truckAccelMultiplier = parseInt(document.getElementById('range-truck-a').value);
+      const accelLabels = { 1: "Suave (1.0 m/s²)", 2: "Moderada (1.8 m/s²)", 3: "Agresiva (2.8 m/s²)" };
+      document.getElementById('disp-truck-a').innerText = accelLabels[truckAccelMultiplier];
+
+      drawPhysicsCanvas();
+    }
+
+    function initPhysicsCanvas() {
+      if (!physAnimFrame) {
+        animatePhysicsLoop();
+      }
+      drawPhysicsCanvas();
+    }
+
+    function animatePhysicsLoop() {
+      const activePane = document.querySelector('.tab-pane.active');
+      if (activePane && activePane.id === 'pane-fisica') {
+        if (physSimRunning) {
+          if (physMode === 'ship') {
+            // Cinemática MRU: v = constante, x = v * t
+            if (shipTimeHours < 548) {
+              shipTimeHours += 1.4 * (shipSpeed / 35);
+              const progress = Math.min(1, shipTimeHours / 548);
+              shipHistory.push({ x: progress, v: 0.65 });
+              if (shipHistory.length > 180) shipHistory.shift();
+
+              const curDist = progress * 19200;
+              updateLiveStats(curDist, shipTimeHours);
+            } else {
+              physSimRunning = false;
+              document.getElementById('sim-play-icon').innerText = '▶';
+              document.getElementById('sim-play-text').innerText = 'Repetir';
+            }
+          } else {
+            // Cinemática MRUV: camión acelerando y frenando entre paradas
+            const targetStop = truckStops[truckLeg + 1];
+            const legEnd = targetStop ? targetStop.pos : 1.0;
+
+            const vMax = 0.0055 * (truckAccelMultiplier * 0.7);
+            const accel = 0.00016 * truckAccelMultiplier;
+
+            if (truckPhase === 'accel') {
+              // Aceleración positiva
+              truckVNorm = Math.min(vMax, truckVNorm + accel);
+              truckXNorm += truckVNorm;
+
+              // Distancia de frenado requerida para parar justo en legEnd: v² / (2a)
+              const brakeDist = (truckVNorm * truckVNorm) / (2 * accel);
+              if ((legEnd - truckXNorm) <= brakeDist) {
+                truckPhase = 'brake';
+              } else if (truckVNorm >= vMax) {
+                truckPhase = 'cruise';
+              }
+            } else if (truckPhase === 'cruise') {
+              truckXNorm += truckVNorm;
+              const brakeDist = (truckVNorm * truckVNorm) / (2 * accel);
+              if ((legEnd - truckXNorm) <= brakeDist) {
+                truckPhase = 'brake';
+              }
+            } else if (truckPhase === 'brake') {
+              // Desaceleración constante
+              truckVNorm = Math.max(0, truckVNorm - accel);
+              truckXNorm += truckVNorm;
+
+              if (truckXNorm >= legEnd || truckVNorm <= 0.00005) {
+                truckXNorm = legEnd;
+                truckVNorm = 0;
+                truckPhase = 'stopped';
+                truckStopFrames = 75; // Pausa en la parada (~1.2 seg)
+              }
+            } else if (truckPhase === 'stopped') {
+              // Detenido en entrega
+              truckVNorm = 0;
+              truckStopFrames--;
+              if (truckStopFrames <= 0) {
+                truckLeg++;
+                if (truckLeg >= 3) {
+                  truckPhase = 'done';
+                  physSimRunning = false;
+                  document.getElementById('sim-play-icon').innerText = '▶';
+                  document.getElementById('sim-play-text').innerText = 'Repetir';
+                } else {
+                  truckPhase = 'accel';
+                }
+              }
+            }
+
+            const vMaxNorm = 0.0055 * (truckAccelMultiplier * 0.7);
+            truckHistory.push({ x: truckXNorm, v: truckVNorm / vMaxNorm });
+            if (truckHistory.length > 180) truckHistory.shift();
+
+            const totalDistKm = truckXNorm * 12.0; // 12 km de circuito barrial
+            updateLiveStats(totalDistKm, truckLeg);
+          }
+        }
+        drawPhysicsCanvas();
+      }
+      physAnimFrame = requestAnimationFrame(animatePhysicsLoop);
+    }
+
+    function updateLiveStats(dist, aux) {
+      const statsEl = document.getElementById('sim-live-stats');
+      if (!statsEl) return;
+
+      if (physMode === 'ship') {
+        const fuel = Math.round(dist * 0.013); // Toneladas de fueloil
+        statsEl.innerText = `Dist: ${Math.round(dist).toLocaleString()} km / 19.200 km · Tiempo: ${Math.round(aux)} h · Fueloil: ${fuel} t`;
+      } else {
+        const stopsCount = Math.min(3, aux);
+        let estadoTxt = 'Listo';
+        if (truckPhase === 'accel') estadoTxt = 'Acelerando (+diésel)';
+        else if (truckPhase === 'cruise') estadoTxt = 'Velocidad crucero';
+        else if (truckPhase === 'brake') estadoTxt = 'Frenando';
+        else if (truckPhase === 'stopped') estadoTxt = 'Entregando paquete';
+        else if (truckPhase === 'done') estadoTxt = 'Finalizado';
+
+        statsEl.innerText = `Dist: ${dist.toFixed(1)} km · Paradas: ${stopsCount}/3 · Estado: ${estadoTxt}`;
+      }
+    }
+
+    function drawPhysicsCanvas() {
+      const canvas = document.getElementById('canvas-physics');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+
+      const width = canvas.parentElement.clientWidth;
+      const height = 240;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, width, height);
+
+      // Zona superior: Animación visual del vehículo
+      const animHeight = 110;
+      ctx.fillStyle = physMode === 'ship' ? '#f0f9ff' : '#f8fafc';
+      ctx.fillRect(0, 0, width, animHeight);
+
+      if (physMode === 'ship') {
+        // Mar y Buque en MRU
+        const seaY = animHeight - 22;
+        ctx.fillStyle = '#0284c7';
+        ctx.fillRect(0, seaY, width, 22);
+
+        // Olas animadas
+        ctx.strokeStyle = '#bae6fd';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (let x = 0; x < width; x += 15) {
+          ctx.lineTo(x, seaY + Math.sin(x * 0.1 + shipTimeHours * 0.2) * 3);
+        }
+        ctx.stroke();
+
+        // Posición del buque a lo largo de la ruta
+        const progress = Math.min(1, shipTimeHours / 548);
+        const shipX = 35 + progress * (width - 110);
+
+        // Dibujar Buque ORIENTADO A LA DERECHA (dirección de avance)
+        ctx.save();
+        ctx.translate(shipX, seaY - 4);
+        ctx.scale(-1, 1); // Invierte horizontalmente el emoji para que mire a la derecha
+        ctx.font = '28px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('🚢', 0, 0);
+        ctx.restore();
+
+        // Textos de puertos seguros sin cortes
+        ctx.font = '600 11px system-ui, sans-serif';
+        ctx.fillStyle = '#475569';
+        ctx.textAlign = 'left';
+        ctx.fillText('🇨🇳 Shanghai', 10, seaY - 8);
+
+        ctx.fillStyle = '#065f46';
+        ctx.font = 'bold 11px system-ui, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('🏁 Puerto Bs. As.', width - 14, seaY - 8);
+
+      } else {
+        // Calle y Camión en MRUV a lo largo de toda la pantalla
+        const roadY = animHeight - 20;
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(0, roadY, width, 20);
+
+        // Líneas punteadas de asfalto
+        ctx.strokeStyle = '#f8fafc';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 8]);
+        ctx.beginPath();
+        ctx.moveTo(0, roadY + 10);
+        ctx.lineTo(width, roadY + 10);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Dibujar las 4 paradas a lo largo de la calle
+        const startX = 32;
+        const streetSpan = width - 64;
+
+        truckStops.forEach((stop, i) => {
+          const stopPx = startX + stop.pos * streetSpan;
+          
+          // Icono de la parada
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(stop.icon, stopPx, roadY - 20);
+
+          // Etiqueta
+          ctx.fillStyle = '#64748b';
+          ctx.font = 'bold 9px system-ui, sans-serif';
+          ctx.fillText(stop.label, stopPx, roadY - 6);
+
+          // Si el camión está detenido entregando en esta parada
+          if (truckPhase === 'stopped' && truckLeg + 1 === i) {
+            ctx.fillStyle = '#16a34a';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillText('📦 ¡Entregado!', stopPx, roadY - 40);
+          }
+        });
+
+        // Posición actual del camión
+        const truckScreenX = startX + truckXNorm * streetSpan;
+
+        // Dibujar Camión ORIENTADO A LA DERECHA (dirección de avance)
+        ctx.save();
+        ctx.translate(truckScreenX, roadY - 4);
+        ctx.scale(-1, 1); // Invierte horizontalmente el emoji para que mire al frente
+        ctx.font = '26px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('🚚', 0, 0);
+        ctx.restore();
+
+        // Alerta de estado dinámico sobre el camión
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 10px system-ui, sans-serif';
+        if (truckPhase === 'accel') {
+          ctx.fillStyle = '#dc2626';
+          ctx.fillText('⚡ ¡ACELERANDO! (+Diésel)', truckScreenX, roadY - 34);
+        } else if (truckPhase === 'brake') {
+          ctx.fillStyle = '#ea580c';
+          ctx.fillText('🛑 FRENANDO (Parada)', truckScreenX, roadY - 34);
+        } else if (truckPhase === 'cruise') {
+          ctx.fillStyle = '#2563eb';
+          ctx.fillText('🚗 Velocidad crucero', truckScreenX, roadY - 34);
+        } else if (truckPhase === 'done') {
+          ctx.fillStyle = '#16a34a';
+          ctx.fillText('🎉 ¡Llegada al CENS!', truckScreenX, roadY - 34);
+        }
+      }
+
+      // Zona inferior: Gráficos de Cinemática en Tiempo Real x(t) y v(t)
+      const graphY = animHeight + 10;
+      const graphH = height - graphY - 18;
+      const halfW = (width - 30) / 2;
+
+      // Subgráfico 1: Posición vs Tiempo x(t)
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(10, graphY, halfW, graphH);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(10, graphY, halfW, graphH);
+
+      ctx.fillStyle = '#334155';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('Posición: x(t)', 16, graphY + 12);
+
+      // Trazo de posición real en vivo
+      const history = physMode === 'ship' ? shipHistory : truckHistory;
+      if (history.length > 1) {
+        ctx.strokeStyle = physMode === 'ship' ? '#059669' : '#2563eb';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+
+        const stepW = (halfW - 24) / 180;
+        history.forEach((pt, idx) => {
+          const px = 14 + idx * stepW;
+          const py = graphY + graphH - 6 - pt.x * (graphH - 24);
+          if (idx === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+      }
+
+      // Subgráfico 2: Velocidad vs Tiempo v(t)
+      const g2X = 20 + halfW;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(g2X, graphY, halfW, graphH);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(g2X, graphY, halfW, graphH);
+
+      ctx.fillStyle = '#334155';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('Velocidad: v(t)', g2X + 6, graphY + 12);
+
+      // Trazo de velocidad real en vivo
+      if (history.length > 1) {
+        ctx.strokeStyle = physMode === 'ship' ? '#0284c7' : '#ef4444';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+
+        const stepW = (halfW - 24) / 180;
+        history.forEach((pt, idx) => {
+          const px = g2X + 6 + idx * stepW;
+          const py = graphY + graphH - 6 - pt.v * (graphH - 24);
+          if (idx === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+
+        // Explicación dinámica al pie
+        ctx.fillStyle = physMode === 'ship' ? '#0284c7' : '#ef4444';
+        ctx.font = 'bold 9px sans-serif';
+        if (physMode === 'ship') {
+          ctx.fillText('v = constante (a = 0)', g2X + 8, graphY + 24);
+        } else {
+          ctx.fillText('Dientes de sierra (acelera/frena)', g2X + 8, graphY + 24);
+        }
+      }
+    }
+
+    // ========================================================
+    // 5. CALCULADORA ECO & ROPERO
+    // ========================================================
+    let ecoState = { remera: 3, jean: 2, campera: 1, buzo: 2 };
+
+    function adjustEcoItem(type) {
+      ecoState[type] = ecoState[type] > 0 ? 0 : 2;
+      updateEco();
+    }
+
+    function bulkChangeEco(delta) {
+      Object.keys(ecoState).forEach(k => {
+        ecoState[k] = Math.max(0, ecoState[k] + delta);
+      });
+      updateEco();
+    }
+
+    function updateEco() {
+      document.getElementById('c-remera').innerText = ecoState.remera;
+      document.getElementById('c-jean').innerText = ecoState.jean;
+      document.getElementById('c-campera').innerText = ecoState.campera;
+      document.getElementById('c-buzo').innerText = ecoState.buzo;
+
+      const water = (ecoState.remera * 2700) + (ecoState.jean * 7500) + (ecoState.campera * 8500) + (ecoState.buzo * 6000);
+      const co2 = (ecoState.remera * 5.5) + (ecoState.jean * 25) + (ecoState.campera * 19) + (ecoState.buzo * 15);
+
+      document.getElementById('metric-water').innerText = water.toLocaleString('es-AR') + ' L';
+      document.getElementById('metric-co2').innerText = co2.toFixed(1) + ' kg';
+
+      ['remera', 'jean', 'campera', 'buzo'].forEach(t => {
+        const b = document.getElementById('btn-eco-' + t);
+        if (ecoState[t] > 0) b.classList.add('selected');
+        else b.classList.remove('selected');
+      });
+    }
+
+    function applyCatalogFilter(cat, btn) {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+
+      const items = document.querySelectorAll('#catalog-container .catalog-item');
+      items.forEach(it => {
+        if (cat === 'todos' || it.getAttribute('data-cat') === cat) {
+          it.style.display = 'flex';
+        } else {
+          it.style.display = 'none';
+        }
+      });
+    }
+
+    function reserveItem(name) {
+      alert(`🎉 ¡Excelente!\nHas seleccionado: "${name}".\nPodés canjearla o probarla en el Ropero Comunitario del CENS durante la jornada escolar.`);
+    }
+
+    // Modal QR
+    function showQrModal() {
+      document.getElementById('modal-qr').classList.add('show');
+      drawCanvasQR();
+    }
+
+    function hideQrModal() {
+      document.getElementById('modal-qr').classList.remove('show');
+    }
+
+    function drawCanvasQR() {
+      const canvas = document.getElementById('qr-output');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const size = 210;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, size, size);
+
+      const grid = 25;
+      const cs = size / grid;
+
+      function finder(r, c) {
+        ctx.fillStyle = '#064e3b';
+        ctx.fillRect(c * cs, r * cs, 7 * cs, 7 * cs);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect((c + 1) * cs, (r + 1) * cs, 5 * cs, 5 * cs);
+        ctx.fillStyle = '#064e3b';
+        ctx.fillRect((c + 2) * cs, (r + 2) * cs, 3 * cs, 3 * cs);
+      }
+
+      finder(0, 0);
+      finder(0, grid - 7);
+      finder(grid - 7, 0);
+
+      for (let i = 8; i < grid - 8; i++) {
+        if (i % 2 === 0) {
+          ctx.fillRect(i * cs, 6 * cs, cs - 0.3, cs - 0.3);
+          ctx.fillRect(6 * cs, i * cs, cs - 0.3, cs - 0.3);
+        }
+      }
+
+      ctx.fillStyle = '#0f172a';
+      for (let r = 0; r < grid; r++) {
+        for (let c = 0; c < grid; c++) {
+          if ((r < 8 && c < 8) || (r < 8 && c >= grid - 8) || (r >= grid - 8 && c < 8)) continue;
+          if (r === 6 || c === 6) continue;
+          if (((r * 11 + c * 17 + (r ^ c)) % 3 === 0) || ((r + c) % 5 === 0)) {
+            ctx.fillRect(c * cs, r * cs, cs - 0.4, cs - 0.4);
+          }
+        }
+      }
+
+      ctx.fillStyle = '#059669';
+      ctx.beginPath();
+      ctx.arc(size / 2, size / 2, cs * 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 11px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('CENS', size / 2, size / 2);
+    }
+
+    // Inicialización global
+    window.addEventListener('DOMContentLoaded', () => {
+      renderSurveyHTML();
+      recalcLinear();
+      updateEco();
+      window.addEventListener('resize', () => {
+        const activePane = document.querySelector('.tab-pane.active');
+        if (activePane) {
+          if (activePane.id === 'pane-algoritmo') drawFlowchart();
+          if (activePane.id === 'pane-matematica') renderLinearChart();
+          if (activePane.id === 'pane-fisica') drawPhysicsCanvas();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
